@@ -1,0 +1,61 @@
+<div class="shell-container">
+  <app-sidebar [collapsed]="isCollapsed()" (toggleCollapse)="isCollapsed.set(!isCollapsed())" />
+
+  <main class="shell-main">
+    <header>
+      <div class="header-left">
+        <button
+          type="button"
+          (click)="isCollapsed.set(!isCollapsed())"
+          class="menu-toggle"
+          aria-label="Toggle sidebar"
+        >
+          <svg lucideMenu [size]="20"></svg>
+        </button>
+      </div>
+
+      <div class="header-right">
+        <div
+          class="user-profile"
+          (click)="toggleDropdown()"
+          (keydown.enter)="toggleDropdown()"
+          (keydown.space)="$event.preventDefault(); toggleDropdown()"
+          role="button"
+          tabindex="0"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="isDropdownOpen()"
+          data-testid="shell-profile-trigger"
+        >
+          <div class="user-info">
+            <span class="user-name">{{ user()?.name ?? 'Anonymous' }}</span>
+            <span class="user-role">{{ user()?.roleName ?? 'Unauthorized' }}</span>
+          </div>
+
+          <div class="user-avatar">
+            <span>{{ initials() }}</span>
+          </div>
+
+          @if (isDropdownOpen()) {
+            <div class="profile-dropdown">
+              <button type="button" class="dropdown-item" aria-label="Open profile">
+                 <svg lucideUser [size]="20"></svg>
+                 Profile
+                </button>
+              <button type="button" class="dropdown-item text-danger" (click)="logout()" aria-label="Logout">
+                 <svg lucideLogOut [size]="20"></svg>
+                Logout
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <section class="content-section custom-scrollbar">
+      <div class="grid-pattern"></div>
+      <div class="content-wrapper">
+        <router-outlet />
+      </div>
+    </section>
+  </main>
+</div>

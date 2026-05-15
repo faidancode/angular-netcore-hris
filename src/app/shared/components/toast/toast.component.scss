@@ -1,0 +1,137 @@
+@use '../../../../styles/abstract/variables' as v;
+
+.toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toast {
+  min-width: 340px;
+  background: v.$primary;
+  color: white;
+  padding: 0; // Padding diatur di dalam agar border internal rapi
+  display: flex;
+  align-items: stretch; // Agar icon wrapper mengikuti tinggi card
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 8px 8px 0 v.$subtle;
+  animation: slideIn 0.2s ease;
+
+  .toast-main {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+
+  .toast-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+
+    // Garis indikator kecil di bawah icon
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+  }
+
+  .toast-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    .toast-type-label {
+      font-size: .75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .toast-message {
+      font-size: 0.813rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  .toast-close {
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.4);
+    width: 3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+    }
+  }
+}
+
+// Variants
+.toast--success {
+  .toast-icon-wrapper {
+    color: v.$success;
+    &::after {
+      background: v.$success;
+    }
+  }
+  .toast-type-label {
+    color: v.$success;
+  }
+}
+
+.toast--error {
+  .toast-icon-wrapper {
+    color: v.$danger;
+    &::after {
+      background: v.$danger;
+    }
+  }
+  .toast-type-label {
+    color: v.$danger;
+  }
+}
+
+.toast--warning {
+  .toast-icon-wrapper {
+    color: v.$warning;
+    &::after {
+      background: v.$warning;
+    }
+  }
+  .toast-type-label {
+    color: v.$warning;
+  }
+}
+
+.toast--info {
+  .toast-icon-wrapper {
+    color: v.$info;
+    &::after {
+      background: v.$info;
+    }
+  }
+  .toast-type-label {
+    color: v.$info;
+  }
+}

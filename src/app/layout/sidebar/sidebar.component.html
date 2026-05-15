@@ -1,0 +1,91 @@
+<aside [class.collapsed]="collapsed()" class="sidebar-container">
+  <div class="sidebar-header">
+    <div class="logo-box">
+      <div class="icon-square">
+        <svg lucideLayoutGrid [size]="16" color="white"></svg>
+      </div>
+      @if (!collapsed()) {
+        <span class="brand-text">ANNET HRIS</span>
+      }
+    </div>
+  </div>
+
+  <nav class="sidebar-nav custom-scrollbar">
+    <div class="nav-section">
+      @if (!collapsed()) {
+        <p class="section-label">Core Systems</p>
+      }
+
+      <div class="nav-list">
+        @for (item of visibleNavItems(); track item.label) {
+          @if (item.children) {
+            <button
+              type="button"
+              class="nav-item group"
+              (click)="toggleMenu(item)"
+              [attr.aria-label]="'Toggle ' + item.label + ' section'"
+              [attr.aria-expanded]="item.expanded"
+              [class.expanded]="item.expanded"
+            >
+              <div class="active-indicator" [class.active]="item.expanded"></div>
+              <div class="nav-icon">
+                <svg [lucideIcon]="item.icon" [size]="20"></svg>
+              </div>
+              @if (!collapsed()) {
+                <span class="nav-label nav-label--group">{{ item.label }}</span>
+                <svg
+                  class="chevron"
+                  [style.transform]="item.expanded ? 'rotate(90deg)' : 'rotate(0)'"
+                  lucideChevronRight
+                  [size]="16"
+                ></svg>
+              }
+              @if (collapsed()) {
+                <div class="nav-tooltip">{{ item.label }}</div>
+              }
+            </button>
+            @if (item.expanded && !collapsed()) {
+              <div class="nav-children">
+                @for (child of item.children; track child.route) {
+                <a
+                  [routerLink]="child.route"
+                  routerLinkActive="active-link"
+                  class="nav-item nav-child"
+                  [attr.aria-label]="'Go to ' + child.label"
+                >
+                    <div class="active-indicator"></div>
+                    <span class="nav-label nav-label--child">{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            }
+          } @else {
+            <a
+              [routerLink]="item.route"
+              routerLinkActive="active-link"
+              class="nav-item group"
+              [attr.data-testid]="'nav-' + item.route"
+              [attr.aria-label]="'Go to ' + item.label"
+            >
+              <div class="active-indicator"></div>
+
+              <div class="nav-icon">
+                <svg [lucideIcon]="item.icon" [size]="20"></svg>
+              </div>
+
+              @if (!collapsed()) {
+                <span class="nav-label">{{ item.label }}</span>
+              }
+
+              @if (collapsed()) {
+                <div class="nav-tooltip">
+                  {{ item.label }}
+                </div>
+              }
+            </a>
+          }
+        }
+      </div>
+    </div>
+  </nav>
+</aside>

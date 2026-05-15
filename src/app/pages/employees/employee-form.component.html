@@ -1,0 +1,124 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>{{ isEdit ? 'Edit Employee' : 'New Employee' }}</h2>
+      <p>Manage employee records, position, and status.</p>
+    </div>
+    <div class="page-header__actions">
+      <button type="button" class="btn" (click)="onCancel()">
+        Back
+      </button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper" style="padding: 2rem;">
+    <form [formGroup]="employeeForm" (ngSubmit)="onSave()">
+      <div class="form-section">
+        <h4 class="form-section-title">Personal Information</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <div class="form-group" [class.form-group--error]="isInvalid('nip')">
+            <label for="nip">NIP</label>
+            <input id="nip" type="text" formControlName="nip" placeholder="e.g. NIP-20240001" />
+
+            <div class="form-error" *ngIf="isInvalid('nip') && !employeeForm.get('nip')?.hasError('conflict')">
+              NIP is required
+            </div>
+            <div class="form-error" *ngIf="employeeForm.get('nip')?.hasError('conflict')">
+              This NIP is already in use
+            </div>
+          </div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('fullName')">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text" formControlName="fullName" placeholder="e.g. Ahmad Fauzi" />
+
+            <div class="form-error"
+              *ngIf="isInvalid('fullName') && !employeeForm.get('fullName')?.hasError('conflict')">
+              Full name is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" formControlName="gender">
+              <option value="" disabled>Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Employment Details</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <div class="form-group" [class.form-group--error]="isInvalid('positionId')">
+            <label for="positionId">Position</label>
+            <select id="positionId" formControlName="positionId">
+              <option value="" disabled>
+                {{ positionsLoading() ? 'Loading positions...' : 'Select position' }}
+              </option>
+              @for (position of positions(); track position.id) {
+              <option [value]="position.id">{{ position.name }}</option>
+              }
+            </select>
+
+            <div class="form-error"
+              *ngIf="isInvalid('positionId') && !employeeForm.get('positionId')?.hasError('conflict')">
+              Position is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="employeeStatus">Employment Status</label>
+            <select id="employeeStatus" formControlName="employeeStatus">
+              <option value="" disabled>Select status</option>
+              <option value="Permanent">Permanent</option>
+              <option value="Contract">Contract</option>
+              <option value="Probation">Probation</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfJoining">Date of Joining</label>
+            <input id="dateOfJoining" type="date" formControlName="dateOfJoining" />
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfActivePosition">Date of Active Position</label>
+            <input id="dateOfActivePosition" type="date" formControlName="dateOfActivePosition" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Status</h4>
+        <div class="grid grid-cols-1 gap-x-4">
+          <div class="form-group form-group--inline">
+            <label for="isActive">Availability Status</label>
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="isActive" formControlName="isActive" />
+              <label for="isActive" class="text-sm font-bold ml-2">Active</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ isEdit ? 'Update Employee' : 'Create Employee' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

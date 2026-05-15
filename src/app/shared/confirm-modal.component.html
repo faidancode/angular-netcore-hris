@@ -1,0 +1,24 @@
+<div class="modal-backdrop" (click)="onCancel()"></div>
+
+<div class="modal-container confirm-modal">
+    <div class="modal">
+
+        <div class="modal-icon">
+            <svg lucideTriangleAlert [size]="32"></svg>
+        </div>
+
+        <h3>{{ title }}</h3>
+        <p>{{ message }}</p>
+
+        <div class="actions">
+            <button type="button" class="btn" (click)="onCancel()">
+                {{ cancelText }}
+            </button>
+
+            <button type="button" class="btn btn-danger" (click)="onConfirm()">
+                {{ confirmText }}
+            </button>
+        </div>
+
+    </div>
+</div>

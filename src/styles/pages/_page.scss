@@ -1,0 +1,45 @@
+@use '../abstract/variables' as v;
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-6;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-6;
+
+  &__content {
+    h2 {
+      font-size: v.$text-3xl;
+      font-weight: v.$weight-bold;
+      color: v.$primary;
+      letter-spacing: -0.025em;
+      line-height: v.$leading-tight;
+    }
+
+    p {
+      margin-top: v.$space-1;
+      color: v.$text-muted;
+      font-size: v.$text-sm;
+      font-weight: v.$weight-medium;
+      line-height: v.$leading-normal;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$space-4;
+    flex-wrap: wrap;
+  }
+}
+
+.page-section {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-4;
+}

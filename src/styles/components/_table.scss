@@ -1,0 +1,187 @@
+@use '../abstract/variables' as v;
+
+.hris-table-wrapper {
+  background-color: v.$white;
+  border: 1px solid v.$subtle;
+  border-radius: 0 !important;
+  box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.03);
+  margin-top: v.$space-2;
+
+  .table-header-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: v.$space-8;
+    border-bottom: 2px solid v.$primary;
+
+    .toolbar-left {
+      .title {
+        font-size: v.$text-xl;
+        font-weight: 900;
+        color: v.$primary;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: v.$text-muted;
+        margin-top: v.$space-1;
+        display: block;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead th {
+      padding: 1.25rem 1.5rem;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: v.$text-muted;
+      background: v.$white;
+      border-bottom: 1px solid v.$subtle;
+      text-align: left;
+
+      &.sortable {
+        cursor: pointer;
+        transition: color v.$transition-fast;
+
+        &:hover {
+          color: v.$primary;
+        }
+      }
+    }
+
+    tbody tr {
+      border-bottom: 1px solid v.$subtle;
+      transition: background-color v.$transition-fast;
+
+      &:hover {
+        background-color: v.$surface-50;
+      }
+
+      td {
+        padding: 1.25rem 1.5rem;
+        font-size: v.$text-sm;
+        font-weight: 600;
+        color: v.$primary;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  // Cell Specific Components
+  .employee-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: v.$primary;
+      color: v.$white;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: v.$text-xs;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      .name {
+        font-weight: 800;
+        line-height: 1.2;
+      }
+      .nip {
+        font-size: 11px;
+        color: v.$text-muted;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // Pagination & Footer
+  .pagination-toolbar {
+    padding: v.$space-4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid v.$subtle;
+    background: v.$white;
+
+    .page-info {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: v.$text-muted;
+    }
+
+    .limit-select {
+      border: 1px solid v.$subtle;
+      border-radius: 0;
+      padding: v.$space-2;
+      font-weight: 700;
+      margin-left: v.$space-2;
+      outline: none;
+
+      &:focus {
+        border-color: v.$primary;
+      }
+    }
+  }
+}
+
+.hris-badge {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0;
+  display: inline-block;
+
+  &.badge-success {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+  }
+  &.badge-danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-skeleton {
+  height: 1rem;
+  background-color: v.$surface-100;
+  border-radius: 9999px;
+  width: 100%;
+}

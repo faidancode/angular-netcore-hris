@@ -1,0 +1,63 @@
+// Main Brand Colors
+$primary: #0f172a;
+$primary-light: #1e293b;
+$primary-dark: #020617;
+$secondary: #e84e1b;
+$secondary-dark: #c2410c;
+
+// Semantic Colors (Action & Feedback)
+$success: #15803d;
+$success-bg: #f0fdf4;
+$success-border: #bbf7d0;
+
+$info: #0284c7;
+$info-bg: #eff6ff;
+$info-border: #bae6fd;
+
+$warning: #f59e0b;
+$warning-bg: #fffbeb;
+$warning-border: #fef3c7;
+
+$danger: #b91c1c;
+$danger-bg: #fef2f2;
+$danger-border: #fee2e2;
+
+// Additional Elegant Palettes
+$indigo-50:  #f8faff;
+$indigo-600: #312e81;
+
+$emerald-50: #f7fee7;
+$emerald-600: #065f46;
+
+$amber-50:   #fffbeb;
+$amber-600:  #92400e;
+
+// Text Colors
+$text-main: #0f172a;
+$text-muted: #64748b;
+$text-muted-light: #94a3b8;
+$text-white: #ffffff;
+$text-disabled: #cbd5e1;
+
+$text-success:     $success; // Gunakan langsung jika sudah cukup kontras
+$text-danger:      $danger;
+$text-info:        $info;
+$text-warning:     #b45309;
+
+// Surface, Backgrounds & Neutral
+$white: #ffffff;
+$surface-50: #f8fafc;
+$surface-100: #f1f5f9;
+$surface-200: #e2e8f0;
+$surface-300: #cbd5e1;
+$subtle: #e2e8f0;
+
+// Border Colors
+$border-light: #f1f5f9;
+$border-base: #e2e8f0;
+$border-strong: #cbd5e1;
+
+// Special & Overlays
+$overlay: rgba(15, 23, 42, 0.5);
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$transparent: transparent;

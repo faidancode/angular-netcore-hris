@@ -1,0 +1,222 @@
+@use '../abstract/variables' as v;
+
+.form-group {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: v.$primary; // Lebih tegas daripada muted
+  }
+
+  input[type='text'],
+  input[type='number'],
+  input[type='email'],
+  input[type='password'],
+  input[type='date'],
+  textarea,
+  select {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0; // Wajib: Hapus semua radius
+    border: 2px solid v.$surface-200; // Border lebih tebal
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: v.$primary;
+    background-color: white;
+    transition: none; // Hapus transisi lembut
+
+    &::placeholder {
+      color: v.$text-muted-light;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: v.$primary;
+      // Gunakan Hard Shadow (Block Shadow) bukannya Blur
+      box-shadow: 4px 4px 0 v.$subtle;
+      transform: translate(-2px, -2px);
+    }
+
+    &:disabled {
+      background-color: v.$surface-50;
+      border-color: v.$surface-100;
+      cursor: not-allowed;
+      color: v.$text-muted-light;
+    }
+  }
+
+  // Khusus untuk Select agar arrow-nya lebih industrial
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      width: 18px;
+      height: 18px;
+      appearance: none;
+      border: 2px solid v.$primary;
+      border-radius: 0;
+      cursor: pointer;
+      position: relative;
+
+      &:checked {
+        background-color: v.$success;
+        border-color: v.$success;
+
+        &::after {
+          content: '✓';
+          position: absolute;
+          color: white;
+          font-size: 12px;
+          font-weight: 900;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    span {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: v.$text-main;
+    }
+  }
+
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    background: v.$surface-50;
+    border: 1px solid v.$surface-200;
+    border-radius: 0;
+  }
+
+  &--error {
+    label {
+      color: v.$danger;
+    }
+    input {
+      border-color: v.$danger;
+      &:focus {
+        box-shadow: 4px 4px 0 v.$danger;
+      }
+    }
+  }
+}
+
+.form-error {
+  font-size: 10px;
+  font-weight: 800;
+  color: v.$danger;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  &::before {
+    content: '[!]';
+  }
+}
+
+.form-banner--error {
+  padding: 1rem;
+  background: v.$danger; // Background gelap/solid
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+  border-radius: 0;
+  border-left: 6px solid rgba(0, 0, 0, 0.2);
+}
+
+.form-section {
+  margin-bottom: 2.5rem;
+
+  &-title {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: v.$text-muted;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: v.$surface-200;
+    }
+  }
+}
+
+.search-field {
+  position: relative;
+
+  .search-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: v.$primary;
+    z-index: 1;
+  }
+
+  input {
+    border-radius: 0;
+    padding: 0.875rem 1rem 0.875rem 3.5rem;
+    background-color: v.$surface-50;
+    border: 2px solid v.$surface-200;
+    font-size: 0.875rem;
+
+    &:focus {
+      background-color: white;
+      border-color: v.$subtle;
+      box-shadow: 4px 4px 0 v.$subtle;
+    }
+  }
+}
+
+.limit-select {
+  font-size: 11px;
+  font-weight: 900;
+  color: v.$primary;
+  background: white;
+  border: 2px solid v.$primary;
+  border-radius: 0;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+
+  &:hover {
+    background: v.$primary;
+    color: white;
+  }
+}

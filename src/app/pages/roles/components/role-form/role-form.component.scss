@@ -1,0 +1,177 @@
+@use '../../../../../styles/abstract/variables' as v;
+
+.role-form-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.role-form-card {
+  background: white;
+  border: 2px solid v.$primary; // Tebalkan border utama
+  border-radius: 0; // Reset radius
+  box-shadow: 10px 10px 0 rgba(v.$primary, 0.05); // Block shadow
+  overflow: hidden;
+}
+
+.role-form-header {
+  border-bottom: 2px solid v.$surface-100;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1rem;
+
+  .page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.role-form-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// Styling khusus untuk Permission Section
+.permissions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 2px dashed v.$surface-200;
+}
+
+.permissions-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: v.$primary;
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    color: v.$text-muted;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.permission-count {
+  padding: 0.5rem 1rem;
+  background: v.$primary;
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.permission-group {
+  border: 1px solid v.$surface-200;
+  border-left: 6px solid v.$secondary; // Accent bar industrial
+  border-radius: 0;
+  padding: 1.5rem;
+  background: v.$surface-50;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    background: white;
+    border-color: v.$primary;
+    transform: translateX(4px);
+  }
+}
+
+.subject-title {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  font-weight: 900;
+  color: v.$primary;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  &::before {
+    content: '>';
+    color: v.$secondary;
+  }
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+// Checkbox Override (Menggunakan logika dari global form industrial kita)
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.813rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: v.$text-main;
+
+  input {
+    display: none; // Hide real checkbox
+
+    &:checked ~ .checkmark {
+      background-color: v.$secondary;
+      border-color: v.$primary;
+      &::after {
+        display: block;
+      }
+    }
+  }
+
+  .checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border: 2px solid v.$primary;
+    border-radius: 0; // Square
+    margin-right: 0.75rem;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid v.$primary;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:hover .checkmark {
+    box-shadow: 3px 3px 0 rgba(v.$secondary, 0.3);
+  }
+}
+
+.permissions-loading,
+.permissions-empty {
+  padding: 3rem;
+  text-align: center;
+  border: 2px dashed v.$surface-200;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: v.$text-muted;
+  background: v.$surface-50;
+}

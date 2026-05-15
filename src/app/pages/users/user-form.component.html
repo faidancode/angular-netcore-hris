@@ -1,0 +1,111 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>{{ isEdit ? 'Edit User' : 'New User' }}</h2>
+      <p>Manage user details and access control.</p>
+    </div>
+    <div class="page-header__actions">
+      <button type="button" class="btn" (click)="onCancel()">
+        Back
+      </button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper" style="padding: 2rem;">
+    <form [formGroup]="userForm" (ngSubmit)="onSave()">
+      <div class="form-section">
+        <h4 class="form-section-title">Account Information</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <div class="form-group" [class.form-group--error]="isInvalid('name')">
+            <label for="name">Name</label>
+            <input id="name" type="text" formControlName="name" />
+            <div class="form-error" *ngIf="isInvalid('name') && !userForm.get('name')?.hasError('conflict')">
+              Name is required
+            </div>
+            <div class="form-error" *ngIf="userForm.get('name')?.hasError('conflict')">
+              This user name is already in use
+            </div>
+          </div>
+          <div class="form-group" [class.form-group--error]="isInvalid('email')">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" autocomplete="off" />
+            <div class="form-error" *ngIf="isInvalid('email') && !userForm.get('email')?.hasError('conflict')">
+              Email is required
+            </div>
+            <div class="form-error" *ngIf="userForm.get('email')?.hasError('conflict')">
+              This email is already in use
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Security & Roles</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <div class="form-group" [class.form-group--error]="isInvalid('roleId')">
+            <label for="roleId">Role</label>
+            <select id="roleId" formControlName="roleId">
+              <option value="" disabled>Select role</option>
+              @for (role of roleQuery.roles(); track role.id) {
+              <option [value]="role.id">{{ role.name }}</option>
+              }
+            </select>
+            <div class="form-error" *ngIf="isInvalid('roleId')">Role is required</div>
+          </div>
+          <div class="form-group"></div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('password')">
+            <label for="password">Password</label>
+            <input id="password" type="password" formControlName="password" autocomplete="new-password" />
+            <div class="form-error" *ngIf="isInvalid('password')">Password is required</div>
+            <div class="text-xs text-muted" *ngIf="isEdit" style="font-size: 11px; margin-top: 4px; color: #64748b;">
+              Leave blank if not updated
+            </div>
+          </div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('confirmPassword')">
+            <label for="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword" autocomplete="new-password" />
+            <div class="form-error"
+              *ngIf="isInvalid('confirmPassword') && !userForm.get('confirmPassword')?.hasError('mismatch')">
+              Please confirm your password
+            </div>
+            <div class="form-error" *ngIf="userForm.get('confirmPassword')?.hasError('mismatch')">
+              Passwords do not match
+            </div>
+            <div class="text-xs text-muted" *ngIf="isEdit" style="font-size: 11px; margin-top: 4px; color: #64748b;">
+              Leave blank if not updated
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Status</h4>
+        <div class="grid grid-cols-1 gap-x-4">
+          <div class="form-group form-group--inline">
+            <label for="isActive">Availability Status</label>
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="isActive" formControlName="isActive" />
+              <label for="isActive" class="text-sm font-bold ml-2">Active</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ isEdit ? 'Update User' : 'Create User' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

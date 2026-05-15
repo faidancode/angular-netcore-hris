@@ -1,0 +1,29 @@
+<div class="toast-container">
+  <div class="toast" *ngFor="let toast of toasts()" [ngClass]="'toast--' + toast.type">
+    <div class="toast-main">
+      <div class="toast-icon-wrapper">
+        @if (toast.type === 'success') {
+          <svg lucideCircleCheck [size]="24"></svg>
+        }
+        @if (toast.type === 'error') {
+          <svg lucideOctagonAlert [size]="24"></svg>
+        }
+        @if (toast.type === 'warning') {
+          <svg lucideTriangleAlert [size]="24"></svg>
+        }
+        @if (toast.type === 'info') {
+          <svg lucideInfo [size]="24"></svg>
+        }
+      </div>
+
+      <div class="toast-content">
+        <span class="toast-type-label">{{ toast.type }}</span>
+        <span class="toast-message">{{ toast.message }}</span>
+      </div>
+    </div>
+
+    <button class="toast-close" (click)="remove(toast.id)">
+      <svg lucideX [size]="14"></svg>
+    </button>
+  </div>
+</div>

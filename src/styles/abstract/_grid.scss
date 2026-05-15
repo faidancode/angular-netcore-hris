@@ -1,0 +1,58 @@
+/* 
+   Grid Utility - Modern Industrial
+   Fokus pada fleksibilitas kolom tanpa perulangan kode.
+*/
+
+.grid {
+  display: grid;
+  gap: 1.5rem; // Jarak antar elemen industrial yang konsisten
+
+  &--dynamic {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+
+// Responsive Column Helpers
+@each $bp, $width in (sm: 640px, md: 768px, lg: 1024px, xl: 1280px) {
+  @media (min-width: $width) {
+    .#{$bp}\:cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .#{$bp}\:cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .#{$bp}\:cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .#{$bp}\:cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    // Span helpers per breakpoint
+    .#{$bp}\:span-1 {
+      grid-column: span 1 / span 1;
+    }
+    .#{$bp}\:span-2 {
+      grid-column: span 2 / span 2;
+    }
+    .#{$bp}\:span-full {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// Base Span Helpers
+.span-full {
+  grid-column: 1 / -1;
+}
+.span-2 {
+  grid-column: span 2 / span 2;
+}

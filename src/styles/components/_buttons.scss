@@ -1,0 +1,87 @@
+@use '../abstract/variables' as v;
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: v.$transition-base;
+  border: 1px solid v.$subtle;
+  background: v.$white;
+  color: v.$primary;
+  box-shadow: 4px 4px 0px v.$subtle;
+
+  &:hover {
+    background: v.$surface-50;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &-primary {
+    background: v.$primary;
+    color: v.$white;
+    border-color: v.$primary;
+
+    &:hover {
+      background: v.$primary-light;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.action-icon-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  color: v.$text-muted;
+  transition: v.$transition-base;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$surface-100;
+    color: v.$primary;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.delete:hover {
+    background-color: v.$danger-bg;
+    color: #dc2626;
+  }
+}
+
+.page-btn-minimal {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.1rem;
+  border: 1px solid v.$subtle;
+  background-color: v.$white;
+  color: v.$primary;
+  cursor: pointer;
+  transition: v.$transition-base;
+
+  &:hover:not(:disabled) {
+    background-color: v.$surface-50;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}

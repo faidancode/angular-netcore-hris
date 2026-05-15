@@ -1,0 +1,107 @@
+<div class="page-container role-form-page flex flex-col gap-6">
+  <!-- Header Section -->
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2 class="text-primary">{{ roleId ? 'Edit Role' : 'Create Role' }}</h2>
+      <p class="font-mono text-xs uppercase tracking-wider text-muted">
+        // Access Control Configuration
+      </p>
+    </div>
+
+    <div class="page-header__actions">
+      <!-- Tombol Cancel / Back -->
+      <app-icon-button actionType="cancel" variant="secondary"> Back </app-icon-button>
+
+      <!-- Tombol Save -->
+      <app-icon-button
+        type="submit"
+        variant="primary"
+        actionType="save"
+        [loading]="isSubmitting()"
+        [disabled]="isLoadingRole() || isLoadingPermissions()"
+        (click)="onSubmit()"
+      >
+        Save
+      </app-icon-button>
+    </div>
+  </header>
+
+  <div class="page-section">
+    <div class="role-form-card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="role-form-body flex flex-col gap-8">
+        <!-- Role Information Grid -->
+        <div class="grid md:cols-2 gap-6">
+          <div class="form-group" [class.form-group--error]="isInvalid('name')">
+            <label for="name">Role</label>
+            <input id="name" type="text" formControlName="name" placeholder="E.G. TERMINAL_ADMIN" />
+            <div class="form-error" *ngIf="isInvalid('name')">[!] NAME_REQUIRED_MIN_3_CHARS</div>
+          </div>
+
+          <!-- Description (Full width on small, follows grid on md) -->
+          <div class="form-group md:span-1">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              formControlName="description"
+              rows="1"
+              placeholder="Brief context..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Permissions Manifest Section -->
+        <section class="permissions-section">
+          <div class="permissions-header flex items-end justify-between mb-6">
+            <div>
+              <h3>Module Permissions</h3>
+              <p class="font-mono text-xs text-muted uppercase">Configure granular action access</p>
+            </div>
+            <span class="permission-count"> {{ selectedPermissionIds().size }} IDENTIFIED </span>
+          </div>
+
+          <!-- State: Loading -->
+          <div class="permissions-loading" *ngIf="isLoadingRole() || isLoadingPermissions()">
+            // INITIALIZING_PERMISSIONS_MANIFEST...
+          </div>
+
+          <!-- State: Loaded -->
+          <ng-container *ngIf="!isLoadingRole() && !isLoadingPermissions()">
+            <div class="grid lg:cols-2 gap-6">
+              <div class="permission-group" *ngFor="let subject of permissionSubjects()">
+                <h4 class="subject-title">{{ subject }}</h4>
+
+                <div class="actions-grid">
+                  <label
+                    class="checkbox-container"
+                    *ngFor="let perm of groupedPermissions()[subject]"
+                  >
+                    <input
+                      type="checkbox"
+                      [checked]="isPermissionSelected(perm.id)"
+                      (change)="togglePermission(perm.id)"
+                    />
+                    <span class="checkmark"></span>
+                    <span class="action-label">{{ perm.action }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- State: Empty -->
+            <div class="permissions-empty" *ngIf="permissionSubjects().length === 0">
+              [!] NO_PERMISSIONS_FOUND_IN_REGISTRY
+            </div>
+          </ng-container>
+        </section>
+
+        <!-- Validation Banner -->
+        <div
+          class="form-banner--error"
+          *ngIf="!isLoadingRole() && !isLoadingPermissions() && selectedPermissionIds().size === 0"
+        >
+          CRITICAL: AT_LEAST_ONE_PERMISSION_MUST_BE_ACTIVE
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

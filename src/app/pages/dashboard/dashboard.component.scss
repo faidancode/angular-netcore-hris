@@ -1,0 +1,174 @@
+@use '../../../styles/abstract/variables' as v;
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid v.$primary; // Garis bawah tegas
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .header-content {
+    h2 {
+      font-size: 2.5rem; // Lebih besar untuk kesan editorial
+      font-weight: 900;
+      color: v.$primary;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    p {
+      color: v.$text-muted;
+      font-weight: 600;
+      margin-top: 0.75rem;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: .5rem; // Tempelkan card atau beri border antar card
+  margin-bottom: 4rem;
+  border: 1px solid v.$subtle; // Border pembungkus grid
+
+  .stat-card {
+    background-color: white;
+    padding: 2.5rem 2rem;
+    border-radius: 0 !important; // Paksa 0 radius
+    border: 1px solid v.$subtle;
+    transition: all 0.4s v.$transition-base;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      // Aksen garis di atas saat hover
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: v.$primary;
+      transition: width 0.3s ease;
+    }
+
+    &:hover {
+      background-color: v.$surface-50;
+      z-index: 1;
+      box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.05);
+      &::before {
+        width: 100%;
+      }
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+
+      .icon-box {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 0; // Sharp
+        border: 1px solid v.$subtle;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+      }
+
+      .change-badge {
+        font-size: 10px;
+        font-weight: 900;
+        padding: 0.25rem 0.75rem;
+        text-transform: uppercase;
+        border: 1px solid currentColor; // Border sesuai warna teks
+
+        &.positive {
+          color: #065f46;
+          background: #ecfdf5;
+        }
+        &.negative {
+          color: #b91c1c;
+          background: #fef2f2;
+        }
+      }
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: v.$text-muted;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-value {
+      font-size: 2.25rem;
+      font-weight: 900;
+      color: v.$primary;
+      letter-spacing: -0.02em;
+    }
+  }
+}
+
+.stat-card--skeleton {
+  .icon-skeleton {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0;
+  }
+
+  .badge-skeleton {
+    width: 3.5rem;
+    height: 1rem;
+  }
+
+  .skeleton-line {
+    height: 1rem;
+    margin-bottom: 0.75rem;
+
+    &--label {
+      width: 65%;
+    }
+
+    &--value {
+      width: 40%;
+      height: 2.25rem;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Sharp Buttons
+.primary-button {
+  background-color: v.$primary;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0; // Sharp
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  border: 2px solid v.$primary;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: transparent;
+    color: v.$primary;
+  }
+}

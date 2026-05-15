@@ -1,0 +1,92 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Role Management</h2>
+      <p>Manage RBAC roles and their permissions</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field"></div>
+
+      <button *appHasPermission="'Role:create'" class="btn btn-primary" (click)="openCreate()"
+        aria-label="Create role">
+        <span>Create Role</span>
+      </button>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="roles-grid" aria-busy="true" aria-live="polite">
+      @for (placeholder of loadingPlaceholders; track placeholder) {
+        <div class="role-card role-card--skeleton">
+          <div class="card-header">
+            <div>
+              <div class="loading-skeleton skeleton-line skeleton-line--title"></div>
+              <div class="loading-skeleton skeleton-line"></div>
+            </div>
+            <div class="loading-skeleton skeleton-pill"></div>
+          </div>
+
+          <div class="permissions-list">
+            @for (chip of [1, 2, 3, 4, 5]; track chip) {
+              <div class="loading-skeleton skeleton-chip"></div>
+            }
+          </div>
+
+          <div class="card-footer">
+            <div class="loading-skeleton skeleton-button"></div>
+            <div class="loading-skeleton skeleton-button"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+  <div class="roles-grid">
+    @for (role of roles(); track role.id) {
+      <div class="role-card">
+        <div class="card-header">
+          <div class="role-info">
+            <h3>{{ role.name }}</h3>
+            <p class="role-desc">{{ role.description }}</p>
+          </div>
+          <span class="user-count-badge"> {{ role.permissions.length }} perms </span>
+        </div>
+
+        <div class="permissions-list">
+          @for (perm of role.permissions; track perm.id) {
+            <span class="permission-tag" *ngIf="$index < 8">
+              {{ perm.subject }}:{{ perm.action }}
+            </span>
+          }
+          <span class="permission-tag more-tag" *ngIf="role.permissions.length > 8">
+            +{{ role.permissions.length - 8 }} more
+          </span>
+        </div>
+
+        <div class="card-footer">
+          <button
+            *appHasPermission="'Role:update'"
+            class="btn-action edit"
+            (click)="openEdit(role.id)"
+            aria-label="Edit role"
+          >
+            Edit Role
+          </button>
+          <button
+            *appHasPermission="'Role:delete'"
+            class="btn-action delete"
+            (click)="deleteRole(role.id)"
+            aria-label="Delete role"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    }
+
+    <div class="empty-state" *ngIf="roles().length === 0">
+      <p>No roles found.</p>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,317 @@
+@use '../../../styles/abstract/tokens/colors' as c;
+
+$sidebar-width: 18rem;
+$sidebar-width-collapsed: 5rem;
+$sidebar-border: rgba(255, 255, 255, 0.06);
+$sidebar-surface: c.$primary;
+$sidebar-surface-elevated: c.$primary-light;
+$sidebar-text: c.$text-muted;
+$sidebar-text-strong: c.$text-muted-light;
+$sidebar-accent: c.$secondary;
+$transition-speed: 300ms;
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: $sidebar-width;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 40;
+  background: linear-gradient(180deg, $sidebar-surface 0%, $sidebar-surface-elevated 100%);
+  border-right: 1px solid $sidebar-border;
+  transition: width $transition-speed $ease;
+  overflow: hidden;
+
+  &.collapsed {
+    width: $sidebar-width-collapsed;
+
+    .sidebar-header {
+      padding-inline: 0.75rem;
+    }
+
+    .logo-box {
+      justify-content: center;
+    }
+
+    .sidebar-nav {
+      padding-inline: 0.5rem;
+    }
+
+    .nav-item {
+      justify-content: center;
+      padding-inline: 0.75rem;
+    }
+  }
+}
+
+.sidebar-header {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid $sidebar-border;
+  margin-bottom: 1.5rem;
+}
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.icon-square {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $sidebar-accent, #ff7849);
+  box-shadow: 0 12px 24px rgba(232, 78, 27, 0.24);
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.brand-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 0 1rem;
+  overflow-y: auto;
+}
+
+.section-label {
+  padding: 0 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: $sidebar-text;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color $transition-speed ease;
+
+  .nav-label {
+    font-weight: 600;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+
+    .nav-icon,
+    .nav-label,
+    .chevron {
+      color: white;
+    }
+
+    .nav-tooltip {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &.active-link {
+    background: rgba(255, 255, 255, 0.06);
+    .nav-label
+    .nav-icon,
+    .chevron {
+      color: $sidebar-accent;
+    }
+  }
+
+  &.nav-child {
+    margin-left: 1rem;
+    padding-left: 0.75rem;
+    gap: 0.5rem;
+
+    .nav-label--child {
+      font-size: 0.875rem;
+      color: $sidebar-text-strong;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -1rem;
+      width: 10px;
+      height: 1px;
+      background: $sidebar-text;
+      transform: translateY(-50%);
+      transition: background-color $transition-speed ease;
+    }
+
+    &:hover .nav-label--child,
+    &.active-link .nav-label--child {
+      color: $sidebar-accent;
+    }
+
+    &:hover::before,
+    &.active-link::before {
+      background: $sidebar-accent;
+    }
+  }
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: $sidebar-text;
+  transition: color $transition-speed ease;
+}
+
+.nav-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.875rem;
+  color: $sidebar-text-strong;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  transition: color $transition-speed ease;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: $sidebar-text;
+  transition:
+    transform $transition-speed ease,
+    color $transition-speed ease;
+}
+
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: 9999px;
+  background-color: $sidebar-accent;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    height $transition-speed ease,
+    opacity $transition-speed ease;
+
+  &.active {
+    height: 70%;
+    opacity: 1;
+  }
+}
+
+.nav-children {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0.25rem 0.75rem;
+  padding: 0.25rem 0 0.25rem 0.25rem;
+  border-left: 3px solid $sidebar-text;
+}
+
+.nav-tooltip {
+  position: absolute;
+  left: 4rem;
+  z-index: 50;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(0.5rem);
+  transition:
+    opacity $transition-speed ease,
+    transform $transition-speed ease;
+  background-color: white;
+  color: $sidebar-surface;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid $sidebar-border;
+  background-color: #0a0f1d;
+}
+
+.status-text {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $sidebar-text;
+}
+
+.status-pulse {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background-color: #10b981;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,21 @@
+<button [type]="type()" [class]="'btn btn-' + variant()" [disabled]="disabled() || loading()">
+  <!-- Loading State -->
+  <ng-container *ngIf="loading(); else content">
+    <svg lucideLoader [size]="16" class="animate-spin"></svg>
+    <span>{{ loadingText() || 'Processing...' }}</span>
+  </ng-container>
+
+  <!-- Default State -->
+  <ng-template #content>
+    <!-- Auto Icon by actionType -->
+    <ng-container [ngSwitch]="actionType()">
+      <svg *ngSwitchCase="'cancel'" lucideArrowLeft [size]="16"></svg>
+      <svg *ngSwitchCase="'save'" lucideSave [size]="16"></svg>
+    </ng-container>
+
+    <!-- Custom Icon Override -->
+    <ng-content select="[icon]"></ng-content>
+
+    <span><ng-content></ng-content></span>
+  </ng-template>
+</button>

@@ -1,0 +1,217 @@
+@use '../../../styles/abstract/variables' as *;
+
+.shell-container {
+  display: flex;
+  height: 100dvh;
+  background-color: white;
+  color: $primary;
+  overflow: hidden;
+}
+
+.shell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.shell-main > header {
+  height: 4.5rem;
+  flex: 0 0 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid $subtle;
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  z-index: 30;
+  position: sticky;
+  top: 0;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .menu-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $text-muted;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: $transition-base;
+      border-radius: 50%;
+
+      &:hover {
+        color: $primary;
+        background-color: $surface-50;
+      }
+
+      &:hover svg {
+        transform: scale(1.1);
+      }
+
+      svg {
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding-left: 1rem;
+
+      .user-info {
+        display: none;
+        flex-direction: column;
+        text-align: right;
+
+        @media (min-width: 640px) {
+          display: flex;
+        }
+
+        .user-name {
+          font-size: 0.875rem;
+          font-weight: 900;
+          color: $primary;
+          line-height: 1.2;
+          letter-spacing: -0.025em;
+        }
+
+        .user-role {
+          font-size: 10px;
+          color: $text-muted;
+          text-transform: uppercase;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+        }
+      }
+
+      .user-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+        box-shadow: 4px 4px 0px $secondary;
+        transition: $transition-base;
+        cursor: pointer;
+
+        &:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0px $secondary;
+        }
+
+        span {
+          font-size: 0.75rem;
+          font-weight: 900;
+          color: white;
+          transition: transform 0.2s ease;
+        }
+
+        &:hover span {
+          transform: scale(1.1);
+        }
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.875rem;
+        width: 12rem;
+        background-color: white;
+        border: 1px solid $subtle;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 0;
+        z-index: 50;
+
+        .dropdown-item {
+          padding: 0.75rem 1rem;
+          text-align: left;
+          background: transparent;
+          border: none;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $primary;
+          cursor: pointer;
+          transition: $transition-base;
+
+          &:hover {
+            background-color: $surface-50;
+          }
+
+          &.text-danger {
+            color: #ef4444;
+
+            &:hover {
+              background-color: #fef2f2;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.content-section {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background-color: $surface-50;
+  position: relative;
+  padding: 1.5rem clamp(1rem, 2vw, 2rem) 2rem;
+}
+
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(128, 128, 128, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(128, 128, 128, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 0;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}

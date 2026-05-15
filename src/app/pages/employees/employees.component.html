@@ -1,0 +1,124 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Employees</h2>
+      <p>Employee records, access status, and assignment data.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field">
+        <svg lucideSearch class="search-icon" [size]="18"></svg>
+        <input type="text" placeholder="Search employees..." aria-label="Search employees"
+          [ngModel]="query.searchQuery()"
+          (ngModelChange)="onSearch($event)" />
+      </div>
+
+      <button *appHasPermission="'Employee:create'" class="btn btn-primary" (click)="openForm()"
+        aria-label="Add employee">
+        <svg lucidePlus [size]="18"></svg>
+        <span>Add Employee</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper animate-sharp">
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('fullName')">
+              Identification
+              <svg lucideArrowUpDown [size]="12" class="ml-2 inline opacity-30"></svg>
+            </th>
+            <th>Gender</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Joined Date</th>
+            <th class="text-right">Manage</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (query.loading()) {
+          @for (i of [1, 2, 3, 4, 5]; track i) {
+          <tr>
+            <td colspan="6">
+              <div class="loading-skeleton h-12 w-full bg-slate-50"></div>
+            </td>
+          </tr>
+          }
+          } @else {
+          @for (employee of query.employees(); track employee.id) {
+          <tr>
+            <td>
+              <div class="employee-info-cell">
+                <div class="avatar">{{ employee.fullName.charAt(0) }}</div>
+                <div class="details">
+                  <span class="name">{{ employee.fullName }}</span>
+                  <span class="nip">{{ employee.nip }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="uppercase text-xs font-bold">{{ displayGender(employee) }}</td>
+            <td class="font-bold">{{ employee.positionName }}</td>
+            <td>
+              <span class="hris-badge" [ngClass]="employee.isActive ? 'badge-success' : 'badge-danger'">
+                {{ displayStatus(employee) }}
+              </span>
+            </td>
+            <td class="text-slate-400 font-bold text-xs italic">
+              {{ employee.createdAt | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>
+              <div class="flex justify-end gap-2">
+                <button *appHasPermission="'Employee:update'" class="action-icon-btn" (click)="openForm(employee)"
+                  aria-label="Edit employee">
+                  <svg lucidePencil [size]="14"></svg>
+                </button>
+                <button *appHasPermission="'Employee:delete'" (click)="onDelete(employee.id)"
+                  class="action-icon-btn delete" aria-label="Delete employee">
+                  <svg lucideTrash2 [size]="14"></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">
+              No matching records found.
+            </td>
+          </tr>
+          }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-toolbar">
+      <div class="flex items-center">
+        <span class="page-info">Show</span>
+        <select [ngModel]="query.limit()" (ngModelChange)="onLimitChange($event)" class="limit-select">
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <button class="page-btn-minimal" [disabled]="query.page() === 1" (click)="onPageChange(query.page() - 1)"
+            aria-label="Previous page">
+            <svg lucideChevronLeft [size]="16"></svg>
+          </button>
+          <span class="page-info">Page {{ query.page() }}</span>
+          <button class="page-btn-minimal" [disabled]="query.loading() || !query.hasMore()"
+            (click)="onPageChange(query.page() + 1)" aria-label="Next page">
+            <svg lucideChevronRight [size]="16"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

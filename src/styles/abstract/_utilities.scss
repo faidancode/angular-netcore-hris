@@ -1,0 +1,57 @@
+@use 'tokens/colors' as c;
+
+// Background Utilities
+.bg-primary {
+  background-color: c.$primary !important;
+}
+.bg-secondary {
+  background-color: c.$secondary !important;
+}
+.bg-surface-50 {
+  background-color: c.$surface-50 !important;
+}
+
+// Contextual Utilities (Menggunakan variabel dari _colors)
+.bg-indigo-50 {
+  background-color: c.$indigo-50 !important;
+}
+.text-indigo-600 {
+  color: c.$indigo-600 !important;
+}
+
+.bg-emerald-50 {
+  background-color: c.$emerald-50 !important;
+}
+.text-emerald-600 {
+  color: c.$emerald-600 !important;
+}
+
+.bg-amber-50 {
+  background-color: c.$amber-50 !important;
+}
+.text-amber-600 {
+  color: c.$amber-600 !important;
+}
+
+// Animation
+@keyframes sharpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-sharp {
+  animation: sharpFadeIn 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+// Hint: Tambahkan staggered delay untuk mendukung konsep "staggered reveal" Anda
+@for $i from 1 through 10 {
+  .delay-#{$i} {
+    animation-delay: #{$i * 0.1}s;
+  }
+}
