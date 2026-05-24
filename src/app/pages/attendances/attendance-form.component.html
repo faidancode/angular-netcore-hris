@@ -1,0 +1,67 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>{{ isEdit ? 'Edit Attendance' : 'New Attendance' }}</h2>
+      <p>Manage daily attendance records, check-in and check-out time.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <button type="button" class="btn" (click)="onCancel()">Back</button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper" style="padding: 2rem;">
+    <form [formGroup]="attendanceForm" (ngSubmit)="onSave()">
+      <div class="form-section">
+        <h4 class="form-section-title">Attendance Information</h4>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <div class="form-group" [class.form-group--error]="isInvalid('date')">
+            <label for="date">Date</label>
+            <input id="date" type="date" formControlName="date" />
+            <div class="form-error" *ngIf="isInvalid('date')">Date is required</div>
+          </div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('employeeId')">
+            <label for="employeeId">Employee</label>
+            <select id="employeeId" formControlName="employeeId">
+              <option value="">Select employee</option>
+              @for (employee of employeeQuery.items(); track employee.id) {
+              <option [value]="employee.id">
+                {{ employee.fullName }} ({{ employee.nip }})
+              </option>
+              }
+            </select>
+            <div class="form-error" *ngIf="isInvalid('employeeId')">Employee is required</div>
+          </div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('checkIn')">
+            <label for="checkIn">Check In</label>
+            <input id="checkIn" type="time" formControlName="checkIn" />
+            <div class="form-error" *ngIf="isInvalid('checkIn')">Check in is required</div>
+          </div>
+
+          <div class="form-group" [class.form-group--error]="isInvalid('checkOut')">
+            <label for="checkOut">Check Out</label>
+            <input id="checkOut" type="time" formControlName="checkOut" />
+            <div class="form-error" *ngIf="isInvalid('checkOut')">Check out is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ isEdit ? 'Update Attendance' : 'Create Attendance' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

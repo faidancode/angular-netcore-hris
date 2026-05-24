@@ -54,6 +54,35 @@ export const routes: Routes = [
           import('@pages/positions/positions.component').then((m) => m.PositionComponent),
       },
       {
+        path: 'attendances',
+        canActivate: [permissionGuard('Attendance:read')],
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('@pages/attendances/attendances.component').then(
+                (m) => m.AttendanceComponent,
+              ),
+          },
+          {
+            path: 'new',
+            canActivate: [permissionGuard('Attendance:create')],
+            loadComponent: () =>
+              import('@pages/attendances/attendance-form.component').then(
+                (m) => m.AttendanceFormComponent,
+              ),
+          },
+          {
+            path: ':id',
+            canActivate: [permissionGuard('Attendance:update')],
+            loadComponent: () =>
+              import('@pages/attendances/attendance-form.component').then(
+                (m) => m.AttendanceFormComponent,
+              ),
+          },
+        ],
+      },
+      {
         path: 'users',
         canActivate: [permissionGuard('User:read')],
         children: [

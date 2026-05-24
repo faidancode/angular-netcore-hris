@@ -2,12 +2,13 @@ import { Component, EventEmitter, Output, inject, input, computed, signal } from
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   LucideLayoutDashboard,
+  LucideClock,
   LucideUsers,
   LucideKey,
   LucideChevronLeft,
   LucideChevronRight,
   LucideDynamicIcon,
-  LucideLayoutGrid
+  LucideLayoutGrid,
 } from '@lucide/angular';
 
 import { AbilityService } from '@core/services/ability.service';
@@ -16,13 +17,7 @@ import { parsePermission } from '@core/utils/permission.utils';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    LucideDynamicIcon,
-    LucideLayoutGrid,
-    LucideChevronRight,
-  ],
+  imports: [RouterLink, RouterLinkActive, LucideDynamicIcon, LucideLayoutGrid, LucideChevronRight],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
@@ -37,6 +32,7 @@ export class SidebarComponent {
   protected readonly LucideLayoutGrid = LucideLayoutGrid;
   protected readonly LucideChevronLeft = LucideChevronLeft;
   protected readonly LucideChevronRight = LucideChevronRight;
+  protected readonly LucideClock = LucideClock;
 
   // --- nav config ---
   navItems = signal<NavItem[]>([
@@ -61,7 +57,19 @@ export class SidebarComponent {
           route: '/employees',
           permission: 'Employee:read',
         },
-      ]
+      ],
+    },
+    {
+      label: 'Attendance',
+      icon: LucideClock,
+      expanded: false,
+      children: [
+        {
+          label: 'Attendance',
+          route: '/attendances',
+          permission: 'Attendance:read',
+        },
+      ],
     },
     {
       label: 'Setting',
@@ -78,7 +86,7 @@ export class SidebarComponent {
           route: '/roles',
           permission: 'Role:read',
         },
-      ]
+      ],
     },
   ]);
 
@@ -87,9 +95,9 @@ export class SidebarComponent {
     if (!this.ability.permissionsLoaded()) return [];
 
     return this.navItems()
-      .map(item => {
+      .map((item) => {
         if (item.children) {
-          const filteredChildren = item.children.filter(child => {
+          const filteredChildren = item.children.filter((child) => {
             if (!child.permission) return true;
             const { action, subject } = parsePermission(child.permission);
             return this.ability.can(action, subject);
@@ -98,7 +106,7 @@ export class SidebarComponent {
         }
         return item;
       })
-      .filter(item => {
+      .filter((item) => {
         if (item.children) return item.children.length > 0;
         if (!item.permission) return true;
         const { action, subject } = parsePermission(item.permission);
@@ -108,7 +116,9 @@ export class SidebarComponent {
 
   toggleMenu(item: NavItem) {
     if (item.children) {
-      this.navItems.update(items => items.map(i => i.label === item.label ? { ...i, expanded: !i.expanded } : i));
+      this.navItems.update((items) =>
+        items.map((i) => (i.label === item.label ? { ...i, expanded: !i.expanded } : i)),
+      );
     }
   }
 }

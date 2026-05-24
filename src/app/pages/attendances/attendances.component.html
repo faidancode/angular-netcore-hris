@@ -1,0 +1,186 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Attendances</h2>
+      <p>Daily attendance records, check-in and check-out monitoring.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field">
+        <svg lucideSearch class="search-icon" [size]="18"></svg>
+        <input
+          type="text"
+          placeholder="Search attendances..."
+          aria-label="Search attendances"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearch($event)"
+        />
+      </div>
+
+      <button
+        *appHasPermission="'Attendance:create'"
+        class="btn btn-primary"
+        (click)="openForm()"
+        aria-label="Add attendance"
+      >
+        <svg lucidePlus [size]="18"></svg>
+        <span>Add Attendance</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper">
+    <div class="table-header-toolbar attendance-toolbar">
+      <div class="toolbar-left">
+        <span class="title">Attendance Records</span>
+        <span class="subtitle">Filter by employee and date range</span>
+      </div>
+
+      <div class="toolbar-filters">
+        <select
+          class="attendance-filter"
+          [(ngModel)]="employeeIdFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by employee"
+        >
+          <option value="">All Employees</option>
+          @for (employee of employeeQuery.items(); track employee.id) {
+          <option [value]="employee.id">
+            {{ employee.fullName }} ({{ employee.nip }})
+          </option>
+          }
+        </select>
+
+        <input
+          class="attendance-filter"
+          type="date"
+          [(ngModel)]="dateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by date"
+        />
+
+        <input
+          class="attendance-filter"
+          type="date"
+          [(ngModel)]="fromDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by from date"
+        />
+
+        <input
+          class="attendance-filter"
+          type="date"
+          [(ngModel)]="toDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by to date"
+        />
+
+        <button type="button" class="btn" (click)="onResetFilters()">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('date')">
+              Date <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>Employee</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th class="sortable" (click)="toggleSort('status')">
+              Status <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th style="text-align: right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (query.loading()) {
+          @for (i of [1, 2, 3]; track i) {
+          <tr class="animate-pulse">
+            <td colspan="6">
+              <div class="loading-skeleton"></div>
+            </td>
+          </tr>
+          }
+          } @else {
+          @for (attendance of query.attendances(); track attendance.id) {
+          <tr>
+            <td style="font-weight: 700">{{ attendance.date }}</td>
+            <td>
+              <div class="attendance-info-cell">
+                <div class="details">
+                  <span class="name">{{ attendance.employeeName }}</span>
+                  <span class="nip">{{ attendance.employeeNip }}</span>
+                </div>
+              </div>
+            </td>
+            <td>{{ formatTime(attendance.checkIn) }}</td>
+            <td>{{ formatTime(attendance.checkOut) }}</td>
+            <td>
+              <span class="hris-badge" [ngClass]="attendance.status === 'Late' ? 'badge-danger' : 'badge-success'">
+                {{ displayStatus(attendance) }}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.25rem;">
+                <button
+                  *appHasPermission="'Attendance:update'"
+                  class="action-icon-btn"
+                  (click)="openForm(attendance)"
+                  aria-label="Edit attendance"
+                >
+                  <svg lucidePencil [size]="16"></svg>
+                </button>
+                <button
+                  *appHasPermission="'Attendance:delete'"
+                  (click)="onDelete(attendance.id)"
+                  class="action-icon-btn delete"
+                  aria-label="Delete attendance"
+                >
+                  <svg lucideTrash2 [size]="16"></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-toolbar">
+      <div class="flex items-center">
+        <span class="page-info">Show</span>
+        <select [ngModel]="query.limit()" (ngModelChange)="onLimitChange($event)" class="limit-select">
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.page() === 1"
+            (click)="onPageChange(query.page() - 1)"
+            aria-label="Previous page"
+          >
+            <svg lucideChevronLeft [size]="16"></svg>
+          </button>
+          <span class="page-info">Page {{ query.page() }}</span>
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.loading() || !query.hasMore()"
+            (click)="onPageChange(query.page() + 1)"
+            aria-label="Next page"
+          >
+            <svg lucideChevronRight [size]="16"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
