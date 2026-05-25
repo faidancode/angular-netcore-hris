@@ -6,7 +6,6 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('@pages/login/login.component').then((m) => m.LoginComponent),
   },
-
   {
     path: '',
     canActivate: [authGuard],
@@ -17,7 +16,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('@pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
-
       {
         path: 'employees',
         canActivate: [permissionGuard('Employee:read')],
@@ -31,13 +29,17 @@ export const routes: Routes = [
             path: 'new',
             canActivate: [permissionGuard('Employee:create')],
             loadComponent: () =>
-              import('@pages/employees/employee-form.component').then((m) => m.EmployeeFormComponent),
+              import('@pages/employees/employee-form.component').then(
+                (m) => m.EmployeeFormComponent,
+              ),
           },
           {
             path: ':id',
             canActivate: [permissionGuard('Employee:update')],
             loadComponent: () =>
-              import('@pages/employees/employee-form.component').then((m) => m.EmployeeFormComponent),
+              import('@pages/employees/employee-form.component').then(
+                (m) => m.EmployeeFormComponent,
+              ),
           },
         ],
       },
@@ -78,6 +80,35 @@ export const routes: Routes = [
             loadComponent: () =>
               import('@pages/attendances/attendance-form.component').then(
                 (m) => m.AttendanceFormComponent,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'leave-masters',
+        canActivate: [permissionGuard('LeaveMaster:read')],
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('@pages/leave-masters/leave-masters.component').then(
+                (m) => m.LeaveMastersComponent,
+              ),
+          },
+          {
+            path: 'new',
+            canActivate: [permissionGuard('LeaveMaster:create')],
+            loadComponent: () =>
+              import('@pages/leave-masters/leave-master-form.component').then(
+                (m) => m.LeaveMasterFormComponent,
+              ),
+          },
+          {
+            path: ':id',
+            canActivate: [permissionGuard('LeaveMaster:update')],
+            loadComponent: () =>
+              import('@pages/leave-masters/leave-master-form.component').then(
+                (m) => m.LeaveMasterFormComponent,
               ),
           },
         ],
@@ -142,10 +173,8 @@ export const routes: Routes = [
         loadComponent: () =>
           import('@pages/error/not-found.component').then((m) => m.NotFoundComponent),
       },
-
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
-
   { path: '**', redirectTo: 'not-found' },
 ];

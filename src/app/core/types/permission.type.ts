@@ -8,6 +8,7 @@ export const Subjects = [
   'Employee',
   'Role',
   'Attendance',
+  'LeaveMaster',
   'All',
 ] as const;
 export type Subject = (typeof Subjects)[number];

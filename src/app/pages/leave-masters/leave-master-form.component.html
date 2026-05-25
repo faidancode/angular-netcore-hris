@@ -1,0 +1,61 @@
+<div class="modal-backdrop" (click)="onCancel()"></div>
+
+<div class="modal-container">
+  <div class="modal form-modal">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {{ leaveMaster ? 'Edit Leave Master' : 'New Leave Master' }}
+      </h3>
+
+      <button type="button" class="modal-close" (click)="onCancel()">
+        <svg lucide="x"></svg>
+      </button>
+    </div>
+
+    <form [formGroup]="leaveMasterForm" (ngSubmit)="onSave()" class="modal-body">
+      <div class="form-group" [class.form-group--error]="isInvalid('name')">
+        <label for="name">Leave Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="e.g. Annual Leave" />
+        <div class="form-error" *ngIf="isInvalid('name') && !leaveMasterForm.get('name')?.hasError('conflict')">
+          Name is required and must be 3 to 150 characters
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('code')">
+        <label for="code">Code</label>
+        <input id="code" type="text" formControlName="code" placeholder="e.g. AL" />
+        <div class="form-error" *ngIf="isInvalid('code') && !leaveMasterForm.get('code')?.hasError('conflict')">
+          Code is required and must be 2 to 50 characters
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('quotaDays')">
+        <label for="quotaDays">Quota Days</label>
+        <input id="quotaDays" type="number" min="1" max="365" formControlName="quotaDays" />
+        <div class="form-error" *ngIf="isInvalid('quotaDays')">
+          Quota days must be between 1 and 365
+        </div>
+      </div>
+
+      <div class="form-group form-group--inline">
+        <label for="isActive">Availability Status</label>
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="isActive" formControlName="isActive" />
+          <label for="isActive" class="text-sm font-bold ml-2">Active</label>
+        </div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">{{ errorMessage() }}</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ leaveMaster ? 'Update Leave Master' : 'Create Leave Master' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

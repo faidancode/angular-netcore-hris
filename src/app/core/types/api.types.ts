@@ -100,3 +100,27 @@ export interface UserPayload {
   password?: string;
   isActive?: boolean;
 }
+
+export interface LeaveMaster {
+  id: string;
+  name: string;
+  code: string;
+  quotaDays: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LeaveMasterCreatePayload {
+  name: string;
+  code: string;
+  quotaDays: number;
+  isActive?: boolean;
+}
+
+export interface LeaveMasterUpdatePayload {
+  name?: string;
+  code?: string;
+  quotaDays?: number;
+  isActive?: boolean;
+}
