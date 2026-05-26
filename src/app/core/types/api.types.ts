@@ -124,3 +124,32 @@ export interface LeaveMasterUpdatePayload {
   quotaDays?: number;
   isActive?: boolean;
 }
+
+export interface LeaveAllowance {
+  id: string;
+  employeeId: string;
+  employeeName?: string;
+  leaveId: string;
+  leaveName?: string;
+  year: number;
+  quotaDays: number;
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LeaveAllowanceCreatePayload {
+  employeeId: string;
+  leaveId: string;
+  year: number;
+  quotaDays: number;
+  notes?: string;
+}
+
+export interface LeaveAllowanceUpdatePayload {
+  employeeId?: string;
+  leaveId?: string;
+  year?: number;
+  quotaDays?: number;
+  notes?: string;
+}

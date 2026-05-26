@@ -1,0 +1,89 @@
+<div class="modal-backdrop" (click)="onCancel()"></div>
+
+<div class="modal-container">
+  <div class="modal form-modal">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {{ leaveAllowance ? 'Edit Leave Allowance' : 'New Leave Allowance' }}
+      </h3>
+
+      <button type="button" class="modal-close" (click)="onCancel()">
+        <svg lucide="x"></svg>
+      </button>
+    </div>
+
+    <form [formGroup]="leaveAllowanceForm" (ngSubmit)="onSave()" class="modal-body">
+      <div class="form-group" [class.form-group--error]="isInvalid('employeeId')">
+        <label for="employeeId">Employee</label>
+        <select id="employeeId" formControlName="employeeId">
+          <option value="">Select employee</option>
+          @for (employee of employeeQuery.items(); track employee.id) {
+            <option [value]="employee.id">{{ employee.fullName }} ({{ employee.nip }})</option>
+          }
+        </select>
+        <div
+          class="form-error"
+          *ngIf="isInvalid('employeeId') && !leaveAllowanceForm.get('employeeId')?.hasError('conflict')"
+        >
+          Employee is required
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('leaveId')">
+        <label for="leaveId">Leave Type</label>
+        <select id="leaveId" formControlName="leaveId">
+          <option value="">Select leave type</option>
+          @for (leaveMaster of leaveMasterQuery.leaveMasters(); track leaveMaster.id) {
+            <option [value]="leaveMaster.id">{{ leaveMaster.name }}</option>
+          }
+        </select>
+        <div
+          class="form-error"
+          *ngIf="isInvalid('leaveId') && !leaveAllowanceForm.get('leaveId')?.hasError('conflict')"
+        >
+          Leave type is required
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('year')">
+        <label for="year">Year</label>
+        <input id="year" type="number" min="2000" max="2100" formControlName="year" />
+        <div class="form-error" *ngIf="isInvalid('year') && !leaveAllowanceForm.get('year')?.hasError('conflict')">
+          Year must be between 2000 and 2100
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('quotaDays')">
+        <label for="quotaDays">Quota Days</label>
+        <input id="quotaDays" type="number" min="1" max="365" formControlName="quotaDays" />
+        <div class="form-error" *ngIf="isInvalid('quotaDays')">
+          Quota days must be between 1 and 365
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('notes')">
+        <label for="notes">Notes</label>
+        <textarea
+          id="notes"
+          formControlName="notes"
+          rows="4"
+          maxlength="500"
+          placeholder="Optional note for this leave allowance"
+        ></textarea>
+        <div class="form-error" *ngIf="isInvalid('notes')">Notes must not exceed 500 characters</div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">{{ errorMessage() }}</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ leaveAllowance ? 'Update Leave Allowance' : 'Create Leave Allowance' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

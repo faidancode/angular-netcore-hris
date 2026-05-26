@@ -114,6 +114,35 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'leave-allowances',
+        canActivate: [permissionGuard('LeaveAllowance:read')],
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('@pages/leave-allowances/leave-allowances.component').then(
+                (m) => m.LeaveAllowancesComponent,
+              ),
+          },
+          {
+            path: 'new',
+            canActivate: [permissionGuard('LeaveAllowance:create')],
+            loadComponent: () =>
+              import('@pages/leave-allowances/leave-allowance-form.component').then(
+                (m) => m.LeaveAllowanceFormComponent,
+              ),
+          },
+          {
+            path: ':id',
+            canActivate: [permissionGuard('LeaveAllowance:update')],
+            loadComponent: () =>
+              import('@pages/leave-allowances/leave-allowance-form.component').then(
+                (m) => m.LeaveAllowanceFormComponent,
+              ),
+          },
+        ],
+      },
+      {
         path: 'users',
         canActivate: [permissionGuard('User:read')],
         children: [
