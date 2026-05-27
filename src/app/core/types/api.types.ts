@@ -153,3 +153,36 @@ export interface LeaveAllowanceUpdatePayload {
   quotaDays?: number;
   notes?: string;
 }
+
+export interface LeaveRequest {
+  id: string;
+  requestNo: string;
+  employeeId: string;
+  employeeName?: string;
+  leaveId: string;
+  leaveName?: string;
+  fromDate: string;
+  toDate: string;
+  reason: string;
+  attachmentPath?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LeaveRequestCreatePayload {
+  employeeId: string;
+  leaveId: string;
+  fromDate: string;
+  toDate: string;
+  reason: string;
+  attachmentPath?: string;
+}
+
+export interface LeaveRequestUpdatePayload {
+  employeeId?: string;
+  leaveId?: string;
+  fromDate?: string;
+  toDate?: string;
+  reason?: string;
+  attachmentPath?: string;
+}

@@ -1,0 +1,178 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Leave Requests</h2>
+      <p>Manage employee leave submissions and their requested periods.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field">
+        <svg lucideSearch class="search-icon" [size]="18"></svg>
+        <input
+          type="text"
+          placeholder="Search leave requests..."
+          aria-label="Search leave requests"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearch($event)"
+        />
+      </div>
+
+      <select
+        [ngModel]="employeeIdFilter"
+        (ngModelChange)="employeeIdFilter = $event; onFiltersChange()"
+        class="limit-select"
+        aria-label="Filter by employee"
+      >
+        <option value="">All Employees</option>
+        @for (employee of employeeQuery.items(); track employee.id) {
+          <option [value]="employee.id">{{ employee.fullName }}</option>
+        }
+      </select>
+
+      <select
+        [ngModel]="leaveIdFilter"
+        (ngModelChange)="leaveIdFilter = $event; onFiltersChange()"
+        class="limit-select"
+        aria-label="Filter by leave type"
+      >
+        <option value="">All Leave Types</option>
+        @for (leaveMaster of leaveMasterQuery.leaveMasters(); track leaveMaster.id) {
+          <option [value]="leaveMaster.id">{{ leaveMaster.name }}</option>
+        }
+      </select>
+
+      <input
+        type="date"
+        class="limit-select"
+        aria-label="Filter from date"
+        [ngModel]="fromDateFilter"
+        (ngModelChange)="fromDateFilter = $event; onFiltersChange()"
+      />
+
+      <input
+        type="date"
+        class="limit-select"
+        aria-label="Filter to date"
+        [ngModel]="toDateFilter"
+        (ngModelChange)="toDateFilter = $event; onFiltersChange()"
+      />
+
+      <button type="button" class="btn" (click)="onResetFilters()">Reset</button>
+
+      <button
+        *appHasPermission="'LeaveRequest:create'"
+        class="btn btn-primary"
+        (click)="openForm()"
+        aria-label="Add leave request"
+      >
+        <svg lucidePlus [size]="18"></svg>
+        <span>Add Leave Request</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="hris-table-wrapper">
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('requestNo')">
+              Request No <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>Employee</th>
+            <th>Leave Type</th>
+            <th class="sortable" (click)="toggleSort('fromDate')">
+              From <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th class="sortable" (click)="toggleSort('toDate')">
+              To <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>Reason</th>
+            <th class="sortable" (click)="toggleSort('createdAt')">
+              Created <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th style="text-align: right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (query.loading()) {
+            @for (i of [1, 2, 3]; track i) {
+              <tr class="animate-pulse">
+                <td colspan="8">
+                  <div class="loading-skeleton"></div>
+                </td>
+              </tr>
+            }
+          } @else {
+            @for (leaveRequest of query.leaveRequests(); track leaveRequest.id) {
+              <tr>
+                <td style="font-weight: 700">{{ leaveRequest.requestNo }}</td>
+                <td>{{ leaveRequest.employeeName || '-' }}</td>
+                <td>{{ leaveRequest.leaveName || '-' }}</td>
+                <td>{{ leaveRequest.fromDate | date: 'dd MMM yyyy' }}</td>
+                <td>{{ leaveRequest.toDate | date: 'dd MMM yyyy' }}</td>
+                <td>{{ leaveRequest.reason }}</td>
+                <td
+                  style="color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;"
+                >
+                  {{ leaveRequest.createdAt | date: 'dd MMM yyyy' }}
+                </td>
+                <td>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.25rem;">
+                    <button
+                      class="action-icon-btn"
+                      (click)="openForm(leaveRequest)"
+                      aria-label="Edit leave request"
+                    >
+                      <svg lucidePencil [size]="16"></svg>
+                    </button>
+                    <button
+                      (click)="onDelete(leaveRequest.id)"
+                      class="action-icon-btn delete"
+                      aria-label="Delete leave request"
+                    >
+                      <svg lucideTrash2 [size]="16"></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-toolbar">
+      <div class="flex items-center">
+        <span class="page-info">Show</span>
+        <select [ngModel]="query.limit()" (ngModelChange)="onLimitChange($event)" class="limit-select">
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.page() === 1"
+            (click)="onPageChange(query.page() - 1)"
+            aria-label="Previous page"
+          >
+            <svg lucideChevronLeft [size]="16"></svg>
+          </button>
+          <span class="page-info">Page {{ query.page() }}</span>
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.loading() || !query.hasMore()"
+            (click)="onPageChange(query.page() + 1)"
+            aria-label="Next page"
+          >
+            <svg lucideChevronRight [size]="16"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

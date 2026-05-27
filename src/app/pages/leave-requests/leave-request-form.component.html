@@ -1,0 +1,97 @@
+<div class="modal-backdrop" (click)="onCancel()"></div>
+
+<div class="modal-container">
+  <div class="modal form-modal">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {{ leaveRequest ? 'Edit Leave Request' : 'New Leave Request' }}
+      </h3>
+
+      <button type="button" class="modal-close" (click)="onCancel()">
+        <svg lucide="x"></svg>
+      </button>
+    </div>
+
+    <form [formGroup]="leaveRequestForm" (ngSubmit)="onSave()" class="modal-body">
+      <div class="form-group" [class.form-group--error]="isInvalid('employeeId')">
+        <label for="employeeId">Employee</label>
+        <select id="employeeId" formControlName="employeeId">
+          <option value="">Select employee</option>
+          @for (employee of employeeQuery.items(); track employee.id) {
+            <option [value]="employee.id">{{ employee.fullName }} ({{ employee.nip }})</option>
+          }
+        </select>
+        <div class="form-error" *ngIf="isInvalid('employeeId')">Employee is required</div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('leaveId')">
+        <label for="leaveId">Leave Type</label>
+        <select id="leaveId" formControlName="leaveId">
+          <option value="">Select leave type</option>
+          @for (leaveMaster of leaveMasterQuery.leaveMasters(); track leaveMaster.id) {
+            <option [value]="leaveMaster.id">{{ leaveMaster.name }}</option>
+          }
+        </select>
+        <div class="form-error" *ngIf="isInvalid('leaveId')">Leave type is required</div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('fromDate')">
+        <label for="fromDate">From Date</label>
+        <input id="fromDate" type="date" formControlName="fromDate" />
+        <div class="form-error" *ngIf="isInvalid('fromDate')">From date is required</div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('toDate') || hasInvalidDateRange()">
+        <label for="toDate">To Date</label>
+        <input id="toDate" type="date" formControlName="toDate" />
+        <div class="form-error" *ngIf="isInvalid('toDate')">To date is required</div>
+        <div class="form-error" *ngIf="!isInvalid('toDate') && hasInvalidDateRange()">
+          To date must be greater than or equal to from date
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('reason')">
+        <label for="reason">Reason</label>
+        <textarea
+          id="reason"
+          formControlName="reason"
+          rows="4"
+          maxlength="1000"
+          placeholder="Reason for leave request"
+        ></textarea>
+        <div class="form-error" *ngIf="leaveRequestForm.get('reason')?.hasError('required') && isInvalid('reason')">
+          Reason is required
+        </div>
+        <div class="form-error" *ngIf="leaveRequestForm.get('reason')?.hasError('maxlength') && isInvalid('reason')">
+          Reason must not exceed 1000 characters
+        </div>
+      </div>
+
+      <div class="form-group" [class.form-group--error]="isInvalid('attachmentPath')">
+        <label for="attachmentPath">Attachment Path</label>
+        <input
+          id="attachmentPath"
+          type="text"
+          formControlName="attachmentPath"
+          maxlength="500"
+          placeholder="/uploads/leave/document.pdf"
+        />
+        <div class="form-error" *ngIf="isInvalid('attachmentPath')">
+          Attachment path must not exceed 500 characters
+        </div>
+      </div>
+
+      <div class="form-banner--error" *ngIf="errorMessage()">{{ errorMessage() }}</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          <span *ngIf="loading()">Processing...</span>
+          <span *ngIf="!loading()">
+            {{ leaveRequest ? 'Update Leave Request' : 'Create Leave Request' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

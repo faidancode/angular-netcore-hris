@@ -143,6 +143,35 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'leave-requests',
+        canActivate: [permissionGuard('LeaveRequest:read')],
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('@pages/leave-requests/leave-requests.component').then(
+                (m) => m.LeaveRequestsComponent,
+              ),
+          },
+          {
+            path: 'new',
+            canActivate: [permissionGuard('LeaveRequest:create')],
+            loadComponent: () =>
+              import('@pages/leave-requests/leave-request-form.component').then(
+                (m) => m.LeaveRequestFormComponent,
+              ),
+          },
+          {
+            path: ':id',
+            canActivate: [permissionGuard('LeaveRequest:update')],
+            loadComponent: () =>
+              import('@pages/leave-requests/leave-request-form.component').then(
+                (m) => m.LeaveRequestFormComponent,
+              ),
+          },
+        ],
+      },
+      {
         path: 'users',
         canActivate: [permissionGuard('User:read')],
         children: [

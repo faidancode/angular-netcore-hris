@@ -79,6 +79,11 @@ export class SidebarComponent {
           route: '/leave-allowances',
           permission: 'LeaveAllowance:read',
         },
+        {
+          label: 'Leave Requests',
+          route: '/leave-requests',
+          permission: 'LeaveRequest:read',
+        },
       ],
     },
     {
