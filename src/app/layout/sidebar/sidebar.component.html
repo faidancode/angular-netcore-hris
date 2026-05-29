@@ -47,12 +47,13 @@
             @if (item.expanded && !collapsed()) {
               <div class="nav-children">
                 @for (child of item.children; track child.route) {
-                <a
-                  [routerLink]="child.route"
-                  routerLinkActive="active-link"
-                  class="nav-item nav-child"
-                  [attr.aria-label]="'Go to ' + child.label"
-                >
+                  <a
+                    [routerLink]="child.route"
+                    routerLinkActive="active-link"
+                    class="nav-item nav-child"
+                    [attr.data-testid]="'nav-' + child.route"
+                    [attr.aria-label]="'Go to ' + child.label"
+                  >
                     <div class="active-indicator"></div>
                     <span class="nav-label nav-label--child">{{ child.label }}</span>
                   </a>

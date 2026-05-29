@@ -11,6 +11,7 @@ export const Subjects = [
   'LeaveMaster',
   'LeaveAllowance',
   'LeaveRequest',
+  'Report',
   'All',
 ] as const;
 export type Subject = (typeof Subjects)[number];

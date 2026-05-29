@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,14 @@ export class BaseApiService {
   get<T>(url: string, params?: Record<string, any>): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}${url}`, {
       params: this.buildParams(params),
+    });
+  }
+
+  getFile(url: string, params?: Record<string, any>): Observable<HttpResponse<Blob>> {
+    return this.http.get(`${this.baseUrl}${url}`, {
+      observe: 'response',
+      params: this.buildParams(params),
+      responseType: 'blob',
     });
   }
 

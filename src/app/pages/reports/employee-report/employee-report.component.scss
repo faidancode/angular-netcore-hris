@@ -1,0 +1,167 @@
+@use '../../../../styles/abstract/variables' as v;
+
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  padding: 1rem;
+  border: 1px solid v.$subtle;
+  background: v.$white;
+
+  span {
+    display: block;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: v.$text-muted;
+  }
+
+  strong {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: v.$primary;
+  }
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.breakdown-panel {
+  padding: 1rem;
+  border: 1px solid v.$subtle;
+  background: v.$white;
+
+  h3 {
+    margin-bottom: 0.75rem;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: v.$primary;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: 700;
+    color: v.$text-muted;
+  }
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid v.$surface-100;
+
+  span {
+    min-width: 0;
+    overflow: hidden;
+    color: v.$text-muted;
+    font-size: 12px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: v.$primary;
+    font-size: 12px;
+    font-weight: 900;
+  }
+}
+
+.report-toolbar {
+  align-items: flex-start;
+
+  .toolbar-filters {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .report-filter {
+    min-width: 10rem;
+    max-width: 14rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid v.$subtle;
+    border-radius: 0;
+    outline: none;
+    background: v.$white;
+    color: v.$primary;
+    font-size: 12px;
+    font-weight: 700;
+
+    &:focus {
+      border-color: v.$primary;
+    }
+  }
+}
+
+.report-employee-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: v.$primary;
+    color: v.$white;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .details {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .name {
+    font-weight: 900;
+    color: v.$primary;
+  }
+
+  .muted {
+    max-width: 14rem;
+    overflow: hidden;
+    color: v.$text-muted;
+    font-size: 10px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.strong-cell {
+  font-weight: 900 !important;
+}
+
+.empty-state {
+  padding: 3rem 1rem !important;
+  text-align: center;
+  color: v.$text-muted !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}

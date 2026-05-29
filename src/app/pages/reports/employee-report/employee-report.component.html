@@ -1,0 +1,302 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Employee Report</h2>
+      <p>Read-only employee summary and detail report with export support.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field">
+        <svg lucideSearch class="search-icon" [size]="18"></svg>
+        <input
+          type="text"
+          placeholder="Search employees..."
+          aria-label="Search employee report"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearch($event)"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn"
+        [disabled]="query.exporting()"
+        (click)="onExport('xlsx')"
+        aria-label="Export employee report to Excel"
+      >
+        <svg lucideDownload [size]="16"></svg>
+        <span>XLSX</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="query.exporting()"
+        (click)="onExport('pdf')"
+        aria-label="Export employee report to PDF"
+      >
+        <svg lucideDownload [size]="16"></svg>
+        <span>PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="report-summary" aria-label="Employee report summary">
+    @for (card of summaryCards(); track card.label) {
+      <article class="summary-card">
+        <span>{{ card.label }}</span>
+        <strong>{{ card.value | number }}</strong>
+      </article>
+    }
+  </section>
+
+  <section class="breakdown-grid" aria-label="Employee report breakdowns">
+    <article class="breakdown-panel">
+      <h3>Department</h3>
+      @for (item of topDepartments(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No department summary.</p>
+      }
+    </article>
+
+    <article class="breakdown-panel">
+      <h3>Position</h3>
+      @for (item of topPositions(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No position summary.</p>
+      }
+    </article>
+
+    <article class="breakdown-panel">
+      <h3>Status</h3>
+      @for (item of statusBreakdown(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No status summary.</p>
+      }
+    </article>
+  </section>
+
+  <div class="hris-table-wrapper">
+    <div class="table-header-toolbar report-toolbar">
+      <div class="toolbar-left">
+        <span class="title">Employee Details</span>
+        <span class="subtitle">Filtered report rows</span>
+      </div>
+
+      <div class="toolbar-filters">
+        <select
+          class="report-filter"
+          [(ngModel)]="departmentIdFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by department"
+        >
+          <option value="">All Departments</option>
+          @for (department of departments(); track department.id) {
+            <option [value]="department.id">{{ department.name }}</option>
+          }
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="positionIdFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by position"
+        >
+          <option value="">All Positions</option>
+          @for (position of positions(); track position.id) {
+            <option [value]="position.id">{{ position.name }}</option>
+          }
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="employeeIdFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by employee"
+        >
+          <option value="">All Employees</option>
+          @for (employee of employeeQuery.items(); track employee.id) {
+            <option [value]="employee.id">{{ employee.fullName }} ({{ employee.nip }})</option>
+          }
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="employeeStatusFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by employee status"
+        >
+          <option value="">All Statuses</option>
+          <option value="Permanent">Permanent</option>
+          <option value="Contract">Contract</option>
+          <option value="Probation">Probation</option>
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="employmentTypeFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by employment type"
+        >
+          <option value="">All Employment Types</option>
+          <option value="Permanent">Permanent</option>
+          <option value="Contract">Contract</option>
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="isActiveFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by active status"
+        >
+          <option value="">All Active States</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="genderFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by gender"
+        >
+          <option value="">All Genders</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <input
+          class="report-filter"
+          type="date"
+          [(ngModel)]="fromDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter from joining date"
+        />
+
+        <input
+          class="report-filter"
+          type="date"
+          [(ngModel)]="toDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter to joining date"
+        />
+
+        <button type="button" class="btn" (click)="onResetFilters()">
+          <svg lucideRefreshCcw [size]="16"></svg>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('fullName')">
+              Employee <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th class="sortable" (click)="toggleSort('nip')">
+              NIP <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Gender</th>
+            <th>Employment</th>
+            <th>Status</th>
+            <th class="sortable" (click)="toggleSort('dateOfJoining')">
+              Joined <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (query.loading()) {
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <tr class="animate-pulse">
+                <td colspan="8">
+                  <div class="loading-skeleton"></div>
+                </td>
+              </tr>
+            }
+          } @else {
+            @for (item of query.items(); track item.id) {
+              <tr>
+                <td>
+                  <div class="report-employee-cell">
+                    <div class="avatar">{{ item.fullName.charAt(0) }}</div>
+                    <div class="details">
+                      <span class="name">{{ item.fullName }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="strong-cell">{{ item.nip }}</td>
+                <td>{{ item.departmentName || '-' }}</td>
+                <td>{{ item.positionName || '-' }}</td>
+                <td>{{ item.gender || '-' }}</td>
+                <td>{{ item.employmentType || '-' }}</td>
+                <td>
+                  <span class="hris-badge" [ngClass]="item.isActive ? 'badge-success' : 'badge-danger'">
+                    {{ displayActiveStatus(item) }}
+                  </span>
+                </td>
+                <td>{{ item.dateOfJoining | date: 'dd MMM yyyy' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="empty-state">No matching employee report rows found.</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-toolbar">
+      <div class="flex items-center">
+        <span class="page-info">Show</span>
+        <select [ngModel]="query.limit()" (ngModelChange)="onLimitChange($event)" class="limit-select">
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <span class="page-info">{{ query.total() | number }} rows</span>
+        <div class="flex items-center gap-2">
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.page() === 1"
+            (click)="onPageChange(query.page() - 1)"
+            aria-label="Previous page"
+          >
+            <svg lucideChevronLeft [size]="16"></svg>
+          </button>
+          <span class="page-info">Page {{ query.page() }}</span>
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.loading() || !query.hasMore()"
+            (click)="onPageChange(query.page() + 1)"
+            aria-label="Next page"
+          >
+            <svg lucideChevronRight [size]="16"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

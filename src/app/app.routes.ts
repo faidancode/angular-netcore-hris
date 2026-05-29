@@ -172,6 +172,20 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'reports',
+        canActivate: [permissionGuard('Report:read')],
+        children: [
+          {
+            path: 'employees',
+            loadComponent: () =>
+              import('@pages/reports/employee-report/employee-report.component').then(
+                (m) => m.EmployeeReportComponent,
+              ),
+          },
+          { path: '', redirectTo: 'employees', pathMatch: 'full' },
+        ],
+      },
+      {
         path: 'users',
         canActivate: [permissionGuard('User:read')],
         children: [

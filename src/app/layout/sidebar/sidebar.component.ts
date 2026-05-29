@@ -8,6 +8,7 @@ import {
   LucideChevronLeft,
   LucideChevronRight,
   LucideDynamicIcon,
+  LucideFileChartColumn,
   LucideLayoutGrid,
 } from '@lucide/angular';
 
@@ -83,6 +84,18 @@ export class SidebarComponent {
           label: 'Leave Requests',
           route: '/leave-requests',
           permission: 'LeaveRequest:read',
+        },
+      ],
+    },
+    {
+      label: 'Report',
+      icon: LucideFileChartColumn,
+      expanded: false,
+      children: [
+        {
+          label: 'Employee Report',
+          route: '/reports/employees',
+          permission: 'Report:read',
         },
       ],
     },
