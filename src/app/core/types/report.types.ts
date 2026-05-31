@@ -53,3 +53,37 @@ export interface EmployeeReportFilters {
   fromDate?: string;
   toDate?: string;
 }
+
+export interface AttendanceReportSummary {
+  totalAttendances: number;
+  totalOnTime: number;
+  totalLate: number;
+  totalByStatus: ReportBreakdownItem[];
+  totalByEmployee: ReportBreakdownItem[];
+  totalByDate: ReportBreakdownItem[];
+}
+
+export interface AttendanceReportItem {
+  id: string;
+  date: string;
+  employeeId: string;
+  employeeName: string;
+  employeeNip: string;
+  checkIn: string;
+  checkOut: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AttendanceReport {
+  summary: AttendanceReportSummary;
+  items: AttendanceReportItem[];
+}
+
+export interface AttendanceReportFilters {
+  employeeId?: string;
+  status?: string;
+  date?: string;
+  fromDate?: string;
+  toDate?: string;
+}

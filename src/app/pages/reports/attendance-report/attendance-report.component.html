@@ -1,0 +1,256 @@
+<div class="page-container">
+  <header class="page-header">
+    <div class="page-header__content">
+      <h2>Attendance Report</h2>
+      <p>Read-only attendance summary and detail report with export support.</p>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="search-field">
+        <svg lucideSearch class="search-icon" [size]="18"></svg>
+        <input
+          type="text"
+          placeholder="Search attendances..."
+          aria-label="Search attendance report"
+          [ngModel]="searchTerm"
+          (ngModelChange)="onSearch($event)"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn"
+        [disabled]="query.exporting()"
+        (click)="onExport('xlsx')"
+        aria-label="Export attendance report to Excel"
+      >
+        <svg lucideDownload [size]="16"></svg>
+        <span>XLSX</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="query.exporting()"
+        (click)="onExport('pdf')"
+        aria-label="Export attendance report to PDF"
+      >
+        <svg lucideDownload [size]="16"></svg>
+        <span>PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="report-summary" aria-label="Attendance report summary">
+    @for (card of summaryCards(); track card.label) {
+      <article class="summary-card">
+        <span>{{ card.label }}</span>
+        <strong>{{ card.value | number }}</strong>
+      </article>
+    }
+  </section>
+
+  <section class="breakdown-grid" aria-label="Attendance report breakdowns">
+    <article class="breakdown-panel">
+      <h3>Status</h3>
+      @for (item of statusBreakdown(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No status summary.</p>
+      }
+    </article>
+
+    <article class="breakdown-panel">
+      <h3>Employee</h3>
+      @for (item of employeeBreakdown(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No employee summary.</p>
+      }
+    </article>
+
+    <article class="breakdown-panel">
+      <h3>Date</h3>
+      @for (item of dateBreakdown(); track breakdownLabel(item)) {
+        <div class="breakdown-row">
+          <span>{{ breakdownLabel(item) }}</span>
+          <strong>{{ breakdownValue(item) | number }}</strong>
+        </div>
+      } @empty {
+        <p>No date summary.</p>
+      }
+    </article>
+  </section>
+
+  <div class="hris-table-wrapper">
+    <div class="table-header-toolbar report-toolbar">
+      <div class="toolbar-left">
+        <span class="title">Attendance Details</span>
+        <span class="subtitle">Filtered report rows</span>
+      </div>
+
+      <div class="toolbar-filters">
+        <select
+          class="report-filter"
+          [(ngModel)]="employeeIdFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by employee"
+        >
+          <option value="">All Employees</option>
+          @for (employee of employeeQuery.items(); track employee.id) {
+            <option [value]="employee.id">{{ employee.fullName }} ({{ employee.nip }})</option>
+          }
+        </select>
+
+        <select
+          class="report-filter"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by attendance status"
+        >
+          <option value="">All Statuses</option>
+          <option value="OnTime">On Time</option>
+          <option value="Late">Late</option>
+        </select>
+
+        <input
+          class="report-filter"
+          type="date"
+          [(ngModel)]="dateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter by attendance date"
+        />
+
+        <input
+          class="report-filter"
+          type="date"
+          [(ngModel)]="fromDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter from attendance date"
+        />
+
+        <input
+          class="report-filter"
+          type="date"
+          [(ngModel)]="toDateFilter"
+          (ngModelChange)="onFiltersChange()"
+          aria-label="Filter to attendance date"
+        />
+
+        <button type="button" class="btn" (click)="onResetFilters()">
+          <svg lucideRefreshCcw [size]="16"></svg>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('date')">
+              Date <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th class="sortable" (click)="toggleSort('employeeName')">
+              Employee <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>NIP</th>
+            <th class="sortable" (click)="toggleSort('checkIn')">
+              Check In <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th class="sortable" (click)="toggleSort('checkOut')">
+              Check Out <svg lucideArrowUpDown [size]="14"></svg>
+            </th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (query.loading()) {
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <tr class="animate-pulse">
+                <td colspan="6">
+                  <div class="loading-skeleton"></div>
+                </td>
+              </tr>
+            }
+          } @else {
+            @for (item of query.items(); track item.id) {
+              <tr>
+                <td class="strong-cell">{{ item.date | date: 'dd MMM yyyy' }}</td>
+                <td>
+                  <div class="report-employee-cell">
+                    <div class="avatar">{{ employeeInitial(item) }}</div>
+                    <div class="details">
+                      <span class="name">{{ employeeName(item) }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="strong-cell">{{ employeeNip(item) }}</td>
+                <td>{{ formatTime(item.checkIn) }}</td>
+                <td>{{ formatTime(item.checkOut) }}</td>
+                <td>
+                  <span
+                    class="hris-badge"
+                    [ngClass]="item.status === 'Late' ? 'badge-danger' : 'badge-success'"
+                  >
+                    {{ displayStatus(item) }}
+                  </span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="empty-state">No matching attendance report rows found.</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-toolbar">
+      <div class="flex items-center">
+        <span class="page-info">Show</span>
+        <select
+          [ngModel]="query.limit()"
+          (ngModelChange)="onLimitChange($event)"
+          class="limit-select"
+        >
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <span class="page-info">{{ query.total() | number }} rows</span>
+        <div class="flex items-center gap-2">
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.page() === 1"
+            (click)="onPageChange(query.page() - 1)"
+            aria-label="Previous page"
+          >
+            <svg lucideChevronLeft [size]="16"></svg>
+          </button>
+          <span class="page-info">Page {{ query.page() }}</span>
+          <button
+            class="page-btn-minimal"
+            [disabled]="query.loading() || !query.hasMore()"
+            (click)="onPageChange(query.page() + 1)"
+            aria-label="Next page"
+          >
+            <svg lucideChevronRight [size]="16"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

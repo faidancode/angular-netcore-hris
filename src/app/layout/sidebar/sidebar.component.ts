@@ -97,6 +97,11 @@ export class SidebarComponent {
           route: '/reports/employees',
           permission: 'Report:read',
         },
+        {
+          label: 'Attendance Report',
+          route: '/reports/attendances',
+          permission: 'Report:read',
+        },
       ],
     },
     {

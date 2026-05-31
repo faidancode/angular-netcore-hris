@@ -62,9 +62,7 @@ export const routes: Routes = [
           {
             path: '',
             loadComponent: () =>
-              import('@pages/attendances/attendances.component').then(
-                (m) => m.AttendanceComponent,
-              ),
+              import('@pages/attendances/attendances.component').then((m) => m.AttendanceComponent),
           },
           {
             path: 'new',
@@ -180,6 +178,13 @@ export const routes: Routes = [
             loadComponent: () =>
               import('@pages/reports/employee-report/employee-report.component').then(
                 (m) => m.EmployeeReportComponent,
+              ),
+          },
+          {
+            path: 'attendances',
+            loadComponent: () =>
+              import('@pages/reports/attendance-report/attendance-report.component').then(
+                (m) => m.AttendanceReportComponent,
               ),
           },
           { path: '', redirectTo: 'employees', pathMatch: 'full' },
